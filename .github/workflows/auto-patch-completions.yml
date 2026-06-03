@@ -1,0 +1,71 @@
+# cargo-dist が pwatch.rb を再生成して上書きしたあと、
+# シェル補完を生成・インストールする行を自動で挿入し直すワークフロー。
+#
+# なぜ必要か:
+#   cargo-dist は新リリースのたびに Formula/pwatch.rb を上書きするため、
+#   手で追記した `generate_completions_from_executable` の行が消える。
+#   この workflow が「行が無ければ追加して push」することで、
+#   常に補完つき formula が main に存在する状態を保つ。
+#
+# 無限ループ対策:
+#   GITHUB_TOKEN による push は他の workflow を起動しない (GitHub の仕様)。
+#   さらに、行がすでに存在する場合は何もしないので二重コミットも発生しない。
+
+name: auto-patch pwatch completions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Formula/pwatch.rb"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Insert completion install line if missing
+        id: patch
+        run: |
+          set -euo pipefail
+          FORMULA="Formula/pwatch.rb"
+
+          if grep -q "generate_completions_from_executable" "$FORMULA"; then
+            echo "already patched, nothing to do"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # `install_binary_aliases!` の直後に補完生成行を挿入
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("Formula/pwatch.rb")
+          src = p.read_text()
+          marker = "install_binary_aliases!\n"
+          insert = (
+              "\n"
+              "    # シェル補完を生成してインストール（bash / zsh / fish）\n"
+              "    generate_completions_from_executable(bin/\"pwatch\", \"completion\")\n"
+          )
+          idx = src.find(marker)
+          if idx == -1:
+              raise SystemExit("marker not found: install_binary_aliases!")
+          # marker の直後に挿入
+          pos = idx + len(marker)
+          p.write_text(src[:pos] + insert + src[pos:])
+          PY
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push
+        if: steps.patch.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/pwatch.rb
+          git commit -m "auto: re-apply shell completion install line"
+          git push
