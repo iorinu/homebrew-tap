@@ -46,6 +46,9 @@ class Pwatch < Formula
 
     install_binary_aliases!
 
+    # シェル補完を生成してインストール（bash / zsh / fish）
+    generate_completions_from_executable(bin/"pwatch", "completion")
+
     # Homebrew will automatically install these, so we don't need to do that
     doc_files = Dir["README.*", "readme.*", "LICENSE", "LICENSE.*", "CHANGELOG.*"]
     leftover_contents = Dir["*"] - doc_files
