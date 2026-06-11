@@ -7,16 +7,16 @@ class Termrain < Formula
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/iorinu/termrain/releases/download/v0.3.0/termrain-v0.3.0-aarch64-apple-darwin.tar.gz"
-      sha256 "7e479261ac603b0ab29442c75ae290d6827ba26a802100dcc7912d0b236b42b2"
+      sha256 "3ea6f84233af43cf5cd52a2a42687b5a9b52cde2cb2ebfefb4c24714c3bf8af1"
     end
     if Hardware::CPU.intel?
       url "https://github.com/iorinu/termrain/releases/download/v0.3.0/termrain-v0.3.0-x86_64-apple-darwin.tar.gz"
-      sha256 "b14e6f8f4a43a8eecbbbce1a04b3b57024bbb6aee25ded9b7706f4f95f3249bb"
+      sha256 "6461bc5a65e692447eebb36d7b48fd11a10a147d8c837fd440b1bc178fedac50"
     end
   end
   if OS.linux? && Hardware::CPU.intel?
     url "https://github.com/iorinu/termrain/releases/download/v0.3.0/termrain-v0.3.0-x86_64-unknown-linux-gnu.tar.gz"
-    sha256 "3492fb2818c62120b3bc247aa5cede497ae55283055cfccd1538de9646d33736"
+    sha256 "8db22a70ad5f51a1fbb7245dedda8e6d4bc590efc9475e7fab1f1d0d5893aebc"
   end
 
   def install
