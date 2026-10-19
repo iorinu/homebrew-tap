@@ -1,22 +1,22 @@
 class Termrain < Formula
   desc "Terminal weather forecast and rain radar TUI (JMA + Open-Meteo, Kitty graphics)"
   homepage "https://github.com/iorinu/termrain"
-  version "0.5.0"
+  version "0.5.1"
   license "MIT"
 
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/iorinu/termrain/releases/download/v0.5.0/termrain-v0.5.0-aarch64-apple-darwin.tar.gz"
-      sha256 "c9cdf666d1b9cd52392a8f8c09bc9adcaaf9d359d8624ca3be0e090d6e7d0a7a"
+      url "https://github.com/iorinu/termrain/releases/download/v0.5.1/termrain-v0.5.1-aarch64-apple-darwin.tar.gz"
+      sha256 "e518299f7302590255b1436d206c945be1b9a49697e393142c506ca45b66fdb2"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/iorinu/termrain/releases/download/v0.5.0/termrain-v0.5.0-x86_64-apple-darwin.tar.gz"
-      sha256 "0a3d70fd25e45df0951cd8620865a947449deb05589e05d7881bfbea63e95292"
+      url "https://github.com/iorinu/termrain/releases/download/v0.5.1/termrain-v0.5.1-x86_64-apple-darwin.tar.gz"
+      sha256 "10637168798dc4df9eb62475da9e1135c5802c23e44eb87fbdde34c494bbb306"
     end
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/iorinu/termrain/releases/download/v0.5.0/termrain-v0.5.0-x86_64-unknown-linux-gnu.tar.gz"
-    sha256 "7de92fcf8f2c4c54c409dd528074c811f9b676bcba692d00ed558aca2ff80d7b"
+    url "https://github.com/iorinu/termrain/releases/download/v0.5.1/termrain-v0.5.1-x86_64-unknown-linux-gnu.tar.gz"
+    sha256 "48efb4e6567cd4005d9709905afbe74cf164ee2d36d66dddc106f1b285c9c1f0"
   end
 
   def install
